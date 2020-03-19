@@ -88,23 +88,27 @@ let gitHubCard = data => {
   cardInfo.appendChild(name);
   cardInfo.appendChild(userName);
   cardInfo.appendChild(location);
-  cardInfo.appendChild(profile);
   profile.appendChild(profileLink);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(bio);
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
+
+  console.log(profile);
 
   newCard.classList.add("card");
   profImg.src = data.avatar_url;
   cardInfo.classList.add("card-info");
   profileLink.href = data.url;
+  profileLink.textContent = data.url;
   name.classList.add("name");
   userName.classList.add("username");
 
   name.textContent = data.name;
   userName.textContent = data.login;
   location.textContent = `Location: ${data.location}`;
-  profile.textContent = `Profile: ${profileLink.href}`;
+  profile.innerHTML = `Profile: <a href="${data.url}"> ${data.url}`;
   followers.textContent = `Followers: ${data.followers}`;
   following.textContent = `Following: ${data.following}`;
   bio.textContent = `Bio: ${data.bio}`;
