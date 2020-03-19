@@ -1,20 +1,23 @@
-
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+
+const cards = document.querySelector(".cards");
+
 axios
   .get("https://api.github.com/users/mhidalgo83")
   .then(res => {
     const userData = res.data;
     console.log(userData);
-    githubCard = userData => {
-      profImg.src = userData.avatar_url;
-    };
+    const newGitHubCard = gitHubCard(userData);
+    cards.appendChild(newGitHubCard);
   })
   .catch(err => {
     console.log(err);
   });
+
+// console.log(userData);
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -67,12 +70,13 @@ const followersArray = [];
   bigknell
 */
 
-const githubCard = ({data}) => {
+let gitHubCard = data => {
   const newCard = document.createElement("div");
   const profImg = document.createElement("img");
   const cardInfo = document.createElement("div");
   const name = document.createElement("h3");
   const userName = document.createElement("p");
+  const location = document.createElement("p");
   const profile = document.createElement("p");
   const profileLink = document.createElement("a");
   const followers = document.createElement("p");
@@ -83,6 +87,7 @@ const githubCard = ({data}) => {
   newCard.appendChild(cardInfo);
   cardInfo.appendChild(name);
   cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
   cardInfo.appendChild(profile);
   profile.appendChild(profileLink);
   cardInfo.appendChild(followers);
@@ -90,15 +95,19 @@ const githubCard = ({data}) => {
   cardInfo.appendChild(bio);
 
   newCard.classList.add("card");
-  profImg.src = data.url;
+  profImg.src = data.avatar_url;
   cardInfo.classList.add("card-info");
   profileLink.href = data.url;
   name.classList.add("name");
   userName.classList.add("username");
 
+  name.textContent = data.name;
+  userName.textContent = data.login;
+  location.textContent = `Location: ${data.location}`;
+  profile.textContent = `Profile: ${profileLink.href}`;
+  followers.textContent = `Followers: ${data.followers}`;
+  following.textContent = `Following: ${data.following}`;
+  bio.textContent = `Bio: ${data.bio}`;
+
   return newCard;
 };
-
-const cards = document.querySelector(".cards");
-
-cards.appendChild(githubCard)
