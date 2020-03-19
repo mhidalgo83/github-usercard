@@ -3,8 +3,10 @@
            https://api.github.com/users/<your name>
 */
 
+//Gets class for div that we need to append cards to
 const cards = document.querySelector(".cards");
 
+//Axios call that gets user profile
 axios
   .get("https://api.github.com/users/mhidalgo83")
   .then(res => {
@@ -17,7 +19,6 @@ axios
     console.log(err);
   });
 
-// console.log(userData);
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -40,6 +41,28 @@ axios
 */
 
 const followersArray = [];
+
+axios
+  .get("https://api.github.com/users/mhidalgo83/followers")
+  .then(res => {
+    const followerData = res.data;
+    console.log(followerData);
+    followerData.forEach(data => {
+      axios
+        .get(`https://api.github.com/users/${data.login}`)
+        .then(res => {
+          const profData = res.data;
+          const newGitHubCard = gitHubCard(profData);
+          cards.appendChild(newGitHubCard);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -100,15 +123,15 @@ let gitHubCard = data => {
   newCard.classList.add("card");
   profImg.src = data.avatar_url;
   cardInfo.classList.add("card-info");
-  profileLink.href = data.url;
-  profileLink.textContent = data.url;
+  profileLink.href = data.html_url;
+  profileLink.textContent = data.html_url;
   name.classList.add("name");
   userName.classList.add("username");
 
   name.textContent = data.name;
   userName.textContent = data.login;
   location.textContent = `Location: ${data.location}`;
-  profile.innerHTML = `Profile: <a href="${data.url}"> ${data.url}`;
+  profile.innerHTML = `Profile: <a href="${data.html_url}"> ${data.html_url}`;
   followers.textContent = `Followers: ${data.followers}`;
   following.textContent = `Following: ${data.following}`;
   bio.textContent = `Bio: ${data.bio}`;
