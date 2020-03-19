@@ -10,8 +10,10 @@ const cards = document.querySelector(".cards");
 axios
   .get("https://api.github.com/users/mhidalgo83")
   .then(res => {
+    //Captures data in variable
     const userData = res.data;
-    console.log(userData);
+    
+    //Creates card with user data
     const newGitHubCard = gitHubCard(userData);
     cards.appendChild(newGitHubCard);
   })
@@ -42,15 +44,22 @@ axios
 
 const followersArray = [];
 
+//Axios call that pulls follower information
 axios
   .get("https://api.github.com/users/mhidalgo83/followers")
   .then(res => {
     const followerData = res.data;
     console.log(followerData);
+
+    //Iterates through each follower
     followerData.forEach(data => {
+
+      //Uses login from each follower to get their profile info
       axios
         .get(`https://api.github.com/users/${data.login}`)
         .then(res => {
+        
+          //Gets profile data from followers and renders card with data
           const profData = res.data;
           const newGitHubCard = gitHubCard(profData);
           cards.appendChild(newGitHubCard);
@@ -93,6 +102,7 @@ axios
   bigknell
 */
 
+//Card component
 let gitHubCard = data => {
   const newCard = document.createElement("div");
   const profImg = document.createElement("img");
